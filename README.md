@@ -7,6 +7,26 @@ This guide will walk you through setting up ANTLR4 with a basic lexer grammar an
 - Java JDK installed (version 8 or higher)
 - Command Prompt or PowerShell access
 
+### Verify Java JDK Installation
+
+Before starting, verify that Java JDK is properly installed:
+
+```cmd
+java -version
+javac -version
+```
+
+**Expected output** (example):
+```
+java version "11.0.16" 2022-07-19 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.16+11-LTS-199)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.16+11-LTS-199, mixed mode)
+
+javac 11.0.16
+```
+
+If you see "command not found" errors, download and install Java JDK from [Oracle](https://www.oracle.com/java/technologies/downloads/) or [OpenJDK](https://openjdk.org/).
+
 ## Complete Setup Process
 
 ### Step 1: Download ANTLR4
@@ -24,7 +44,7 @@ This guide will walk you through setting up ANTLR4 with a basic lexer grammar an
    ```
 
 2. **Place the JAR file**:
-   - Copy the downloaded `antlr-4.13.1-complete.jar` to your project directory
+   - Copy the downloaded `antlr-4.13.1-complete.jar` to your project directory (`C:\antlr-demo\`)
    - Rename it to `antlr4.jar` for simplicity
 
 3. **Extract the runtime classes**:
@@ -36,7 +56,48 @@ This guide will walk you through setting up ANTLR4 with a basic lexer grammar an
    - **`org/`** folder - Contains all the ANTLR4 runtime class files
    - Various `.stg` template files and other resources
 
-### Step 3: Set Up Command Path
+### Step 3: Create All Project Files
+
+**Important**: All files should be created in your project directory (`C:\antlr-demo\`):
+
+1. **Create grammar file** (`C:\antlr-demo\BasicLex.g4`):
+   ```cmd
+   notepad BasicLex.g4
+   ```
+   Copy and paste the grammar content (see Step 1 below).
+
+2. **Create input files**:
+   ```cmd
+   notepad input.txt
+   notepad error_input.txt
+   notepad advanced_input.txt
+   notepad activity_input.txt
+   ```
+   Copy and paste the respective content for each file.
+
+3. **Create batch files**:
+   ```cmd
+   notepad antlr4.bat
+   notepad grun.bat
+   ```
+   Copy and paste the respective batch file content.
+
+4. **Verify all files are created**:
+   ```cmd
+   dir *.g4 *.txt *.bat
+   ```
+   You should see:
+   ```
+   BasicLex.g4
+   antlr4.bat
+   grun.bat
+   input.txt
+   error_input.txt
+   advanced_input.txt
+   activity_input.txt
+   ```
+
+### Step 4: Set Up Command Path
 
 1. **Add to PATH (Temporary - for current session)**:
    ```cmd
@@ -51,13 +112,29 @@ This guide will walk you through setting up ANTLR4 with a basic lexer grammar an
    - Click "OK" to save all changes
    - **Restart Command Prompt** for changes to take effect
 
-3. **Verify setup**:
+3. **Verify ANTLR4 setup**:
    ```cmd
    java -cp antlr4.jar org.antlr.v4.Tool
    ```
    You should see ANTLR4 usage information without errors.
 
-## Step 1: Create the Grammar File
+4. **Check ANTLR4 version**:
+   ```cmd
+   java -cp antlr4.jar org.antlr.v4.Tool -version
+   ```
+   This will display the ANTLR4 version number.
+
+5. **Verify extracted files**:
+   ```cmd
+   dir
+   ```
+   You should see:
+   - `antlr4.jar`
+   - `META-INF/` folder
+   - `org/` folder
+   - Various `.stg` files
+
+## Step 5: Create the Grammar File
 
 Create a file named `BasicLex.g4` with the following content:
 
@@ -82,7 +159,7 @@ WS     : [ \t\r\n]+ -> skip;
 - `SEMI: ';';` - Recognizes semicolons
 - `WS: [ \t\r\n]+ -> skip;` - Skips whitespace characters
 
-## Step 2: Create Input Files
+## Step 6: Create Input Files
 
 Create test input files:
 
@@ -96,7 +173,7 @@ int x = 10;
 int x = 10$;
 ```
 
-## Step 4: Create Batch Files
+## Step 7: Create Batch Files
 
 **antlr4.bat** (ANTLR4 code generator):
 ```batch
@@ -110,7 +187,7 @@ java -Xmx500M -cp antlr4.jar org.antlr.v4.Tool %*
 java -cp .;antlr4.jar org.antlr.v4.gui.TestRig %*
 ```
 
-## Step 5: Generate and Compile Java Files
+## Step 8: Generate and Compile Java Files
 
 1. **Generate Java files from grammar:**
    ```cmd
@@ -126,7 +203,7 @@ java -cp .;antlr4.jar org.antlr.v4.gui.TestRig %*
    javac -cp . BasicLex*.java
    ```
 
-## Step 6: Test Tokenization
+## Step 9: Test Tokenization
 
 ### Test with valid input:
 ```cmd
@@ -242,5 +319,30 @@ grun BasicLex tokens -tokens input.txt          # Basic test
 grun BasicLex tokens -tokens error_input.txt    # Error handling test
 grun BasicLex tokens -tokens activity_input.txt # Complex code test
 ```
+
+## Final Verification
+
+After complete setup, run this comprehensive test to verify everything is working:
+
+```cmd
+# Test 1: Check Java and ANTLR4 versions
+java -version
+java -cp antlr4.jar org.antlr.v4.Tool -version
+
+# Test 2: Generate and compile grammar
+antlr4 BasicLex.g4
+javac -cp . BasicLex*.java
+
+# Test 3: Run tokenization
+grun BasicLex tokens -tokens input.txt
+
+# Test 4: Check error handling
+grun BasicLex tokens -tokens error_input.txt
+
+# Test 5: Check complex input
+grun BasicLex tokens -tokens activity_input.txt
+```
+
+If all tests pass without errors, your ANTLR4 setup is complete and ready to use!
 
 Enjoy exploring ANTLR4 lexer tokenization!
