@@ -1,0 +1,6 @@
+int x = 10;
+if (x) {
+int y = 20;
+} else {
+int z = 30;
+}
